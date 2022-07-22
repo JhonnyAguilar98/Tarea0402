@@ -13,6 +13,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 import modelo.Personaje;
@@ -42,11 +44,16 @@ public class PersonajeServicio implements IPersonajeServicio {
     @Override
     public List<Personaje> listar() {
         List<Personaje> retorno=null;
+//        try {
+//        retorno=this.recuperarDeArchivo("C:/carpeta1/archivoPersonaje.dat");
+//        } catch (Exception ex) {
+//           return this.personajeList;
+//    }
         try {
-        retorno=this.recuperarDeArchivo("C:/carpeta1/archivoPersonaje.dat");
+            this.personajeList=this.recuperarDeArchivo("C:/carpeta1/archivoPersonaje.obj");
         } catch (Exception ex) {
-           return this.personajeList;
-    }
+            Logger.getLogger(PersonajeServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return retorno;
     }
 
@@ -67,7 +74,6 @@ public class PersonajeServicio implements IPersonajeServicio {
         
         Personaje personaje=this.buscarPorCodigo(codigoPersonaje);
         var posicion=this.buscarPosicion(personaje);
-        
         this.listar().remove(posicion);
         
         return personaje;
