@@ -30,7 +30,6 @@ public class PersonajeServicio implements IPersonajeServicio {
     @Override
     public Personaje crear(Personaje personaje) {
         this.personajeList.add(personaje);
-       
         try {
         this.almacenarEnArchivo(personaje, "C:/carpeta1/archivoPersonaje.dat");
         } catch (Exception ex) {
@@ -38,24 +37,7 @@ public class PersonajeServicio implements IPersonajeServicio {
                     + "asignado al Personaje: "+ex.getMessage());
         }
         return personaje; 
-        
    }
-
-    @Override
-    public List<Personaje> listar() {
-        List<Personaje> retorno=null;
-//        try {
-//        retorno=this.recuperarDeArchivo("C:/carpeta1/archivoPersonaje.dat");
-//        } catch (Exception ex) {
-//           return this.personajeList;
-//    }
-        try {
-            this.personajeList=this.recuperarDeArchivo("C:/carpeta1/archivoPersonaje.obj");
-        } catch (Exception ex) {
-            Logger.getLogger(PersonajeServicio.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return retorno;
-    }
 
     @Override
     public Personaje modificar(int codigoPersonaje, Personaje personajeNuevo) {
@@ -76,8 +58,7 @@ public class PersonajeServicio implements IPersonajeServicio {
         var posicion=this.buscarPosicion(personaje);
         this.listar().remove(posicion);
         
-        return personaje;
-        
+        return personaje;  
      }
 
     @Override
@@ -106,22 +87,29 @@ public class PersonajeServicio implements IPersonajeServicio {
         }
         return posicion;
     }
-
+    
+    @Override
+    public List<Personaje> listar() {
+        List<Personaje> retorno=null;
+        try {
+            this.personajeList=this.recuperarDeArchivo("C:/carpeta1/archivoPersonaje.obj");
+        } catch (Exception ex) {
+            Logger.getLogger(PersonajeServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return retorno;
+    }
+    
    @Override
     public boolean almacenarEnArchivo(Personaje personaje, String rutaArchivo) throws IOException{
-        var retorno = false;
         ObjectOutputStream salida=null;
+        var retorno=false;
         try{
-            salida = new ObjectOutputStream( new FileOutputStream(rutaArchivo,true) );
-            salida.writeUTF(personaje.getNombre());
-            salida.writeUTF(personaje.getNumeroDeEscenas());
-            salida.writeInt(personaje.getCodigo());
-            salida.writeObject(personaje.getActor());
-            salida.writeObject(personaje.getPelicula());
+            salida = new ObjectOutputStream(new FileOutputStream(new File(rutaArchivo),true));
+            salida.writeObject(personaje);
             salida.close();
             retorno=true;
-        }catch(IOException e)
-        {
+        }catch(Exception e1){
+            System.out.println(e1.toString());
             salida.close();
         }
         
