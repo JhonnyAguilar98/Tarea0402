@@ -16,7 +16,7 @@ import modelo.Actor;
 
 /**
  *
- * @author user
+ * @author usersd
  */
 public class ActorServicio implements IActorServicio {
     
